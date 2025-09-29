@@ -24,7 +24,7 @@ public class ManualQuenchItems : IFeature
         _sapi = (api as ICoreServerAPI)!;
     }
     
-    public bool Initialize(ICoreAPI api)
+    public bool Initialize()
     {
         if (_sapi.Side != EnumAppSide.Server)  return false;
         long? listener = _sapi.Event.RegisterGameTickListener(OnGameTick, 200, 0);

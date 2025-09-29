@@ -20,10 +20,14 @@ public class CraftOnlyQuenchedItems : IFeature
 
     public EnumAppSide Side => EnumAppSide.Client;
 
-    public bool Initialize(ICoreAPI api)
+    public CraftOnlyQuenchedItems(ICoreAPI api)
+    {
+        _api = api;
+    }
+
+    public bool Initialize()
     {
         _harmony = OldMansEnhancedEditionModSystem.NewPatch("Craft Quenched Items Only", _patchCategoryName);
-        _api = api;
         _notifier = new Notifier(_api);
         Logger.Debug("Disallow Craft hot Items ... initialized");
         return true;

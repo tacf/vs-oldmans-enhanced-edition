@@ -6,7 +6,7 @@ namespace OldMansEnhancedEdition.Features;
 public interface IFeature 
 {
     public EnumAppSide Side { get; }
-    public bool Initialize(ICoreAPI api);
+    public bool Initialize();
     
     public void Teardown();
 }

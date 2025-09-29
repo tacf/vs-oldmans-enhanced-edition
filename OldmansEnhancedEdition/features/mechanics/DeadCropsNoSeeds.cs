@@ -16,7 +16,7 @@ public class DeadCropsNoSeeds : IFeature
 
     public EnumAppSide Side => EnumAppSide.Server;
 
-    public bool Initialize(ICoreAPI api)
+    public bool Initialize()
     {
         _harmony = OldMansEnhancedEditionModSystem.NewPatch("Dead Crops drop no seeds", _patchCategoryName);
         return true;

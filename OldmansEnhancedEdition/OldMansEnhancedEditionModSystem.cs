@@ -33,7 +33,7 @@ public class OldMansEnhancedEditionModSystem : ModSystem
             new ManualQuenchItems(api),
             new DeadCropsNoSeeds(),
         ];
-        LoadFeatures(features, api);
+        LoadFeatures(features);
         Logger.Log(" Finished server features initialization");
     }
 
@@ -41,9 +41,10 @@ public class OldMansEnhancedEditionModSystem : ModSystem
     {
         List<IFeature> features =
         [
-            new CraftOnlyQuenchedItems(),
+            new CraftOnlyQuenchedItems(api),
+            new CTRLStopOnLadders(api),
         ];
-        LoadFeatures(features, api);
+        LoadFeatures(features);
         Logger.Log(" Finished client features initialization");
     }
     
@@ -62,11 +63,11 @@ public class OldMansEnhancedEditionModSystem : ModSystem
         return patcher;
     }
 
-    private void LoadFeatures(List<IFeature> features, ICoreAPI api)
+    private void LoadFeatures(List<IFeature> features)
     {
         foreach (IFeature feature in features)
         {
-            if (!feature.Initialize(api))
+            if (!feature.Initialize())
                 Logger.Error($"Failed to initialize feature {feature.GetType().Name}");
             else
                 Logger.Log($"Loaded feature {feature.GetType().Name}");
