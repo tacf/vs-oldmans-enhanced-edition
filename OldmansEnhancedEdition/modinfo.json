@@ -1,0 +1,15 @@
+{
+    "$schema": "https://moddbcdn.vintagestory.at/schema/modinfo.latest.json",
+    "type": "Code",
+    "modid": "oldmansenhancededition",
+    "name": "OldMans Enhanced Edition",
+    "side": "Universal",
+    "authors": [
+        "tacf"
+    ],
+    "description": "Custom Crafted Experience -- Building upon the base game, adding several personal changes",
+    "version": "0.0.1",
+    "dependencies": {
+        "game": "1.21.0"
+    }
+}
