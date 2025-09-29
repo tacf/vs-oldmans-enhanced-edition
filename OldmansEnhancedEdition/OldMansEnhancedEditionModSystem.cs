@@ -16,7 +16,6 @@ public class OldMansEnhancedEditionModSystem : ModSystem
 {
     public static ModInfo ModInfo;
     
-    private List<IFeature>  _features = new() { };
     
     public override void Start(ICoreAPI api)
     {
@@ -24,25 +23,27 @@ public class OldMansEnhancedEditionModSystem : ModSystem
         Logger.Init(this, api.Logger);
         Logger.Event(" has started initialization");
         
-        _features.AddRange([
-            new CraftOnlyQuenchedItems(),
-            new ManualQuenchItems(api),
-            new DeadCropsNoSeeds()
-        ]);
-        
-        LoadFeatures(EnumAppSide.Universal, api);
         Logger.Log(" Finished universal features initialization");
     }
 
     public override void StartServerSide(ICoreServerAPI api)
     {
-        LoadFeatures(EnumAppSide.Server, api);
+        List<IFeature> features =
+        [
+            new ManualQuenchItems(api),
+            new DeadCropsNoSeeds(),
+        ];
+        LoadFeatures(features, api);
         Logger.Log(" Finished server features initialization");
     }
 
     public override void StartClientSide(ICoreClientAPI api)
     {
-        LoadFeatures(EnumAppSide.Client, api);
+        List<IFeature> features =
+        [
+            new CraftOnlyQuenchedItems(),
+        ];
+        LoadFeatures(features, api);
         Logger.Log(" Finished client features initialization");
     }
     
@@ -61,11 +62,10 @@ public class OldMansEnhancedEditionModSystem : ModSystem
         return patcher;
     }
 
-    private void LoadFeatures(EnumAppSide side, ICoreAPI api)
+    private void LoadFeatures(List<IFeature> features, ICoreAPI api)
     {
-        foreach (IFeature feature in _features)
+        foreach (IFeature feature in features)
         {
-            if (feature.Side != side) continue;
             if (!feature.Initialize(api))
                 Logger.Error($"Failed to initialize feature {feature.GetType().Name}");
             else
