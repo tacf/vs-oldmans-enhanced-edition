@@ -3,6 +3,7 @@ using HarmonyLib;
 using OldMansEnhancedEdition.Features;
 using OldMansEnhancedEdition.Features.Mechanics;
 using OldMansEnhancedEdition.Features.Recipies;
+using OldMansEnhancedEdition.Features.UI;
 using OldMansEnhancedEdition.Utils;
 using Vintagestory.API.Client;
 using Vintagestory.API.Server;
@@ -23,6 +24,12 @@ public class OldMansEnhancedEditionModSystem : ModSystem
         Logger.Init(this, api.Logger);
         Logger.Event(" has started initialization");
         
+        List<IFeature> features =
+        [
+            new SpoilingInventoryIndicator(api),
+        ];
+        LoadFeatures(features);
+            
         Logger.Log(" Finished universal features initialization");
     }
 
