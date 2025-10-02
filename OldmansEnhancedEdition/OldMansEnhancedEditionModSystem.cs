@@ -23,13 +23,6 @@ public class OldMansEnhancedEditionModSystem : ModSystem
         ModInfo = Mod.Info;
         Logger.Init(this, api.Logger);
         Logger.Event(" has started initialization");
-        
-        List<IFeature> features =
-        [
-            new SpoilingInventoryIndicator(api),
-        ];
-        LoadFeatures(features);
-            
         Logger.Log(" Finished universal features initialization");
     }
 
@@ -50,6 +43,7 @@ public class OldMansEnhancedEditionModSystem : ModSystem
         [
             new CraftOnlyQuenchedItems(api),
             new CTRLStopOnLadders(api),
+            new SpoilingInventoryIndicator(api),
         ];
         LoadFeatures(features);
         Logger.Log(" Finished client features initialization");

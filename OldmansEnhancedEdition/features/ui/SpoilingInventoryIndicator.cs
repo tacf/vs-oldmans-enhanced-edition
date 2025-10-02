@@ -20,7 +20,7 @@ namespace OldMansEnhancedEdition.Features.UI;
 public class SpoilingInventoryIndicator : IFeature
 {
     private readonly string _patchCategoryName = "omed_spoiling_indicator";
-    private static ICoreAPI _api;
+    private static ICoreClientAPI _capi;
     private static IClientPlayer _player;
     private Harmony _harmony;
     private static long _playerAwaitListenerId;
@@ -28,39 +28,31 @@ public class SpoilingInventoryIndicator : IFeature
 
     public EnumAppSide Side => EnumAppSide.Universal;
 
-    public SpoilingInventoryIndicator(ICoreAPI api)
+    public SpoilingInventoryIndicator(ICoreClientAPI capi)
     {
-        _api = api;
+        _capi = capi;
     }
 
     public bool Initialize()
     {
-        // We seem to need both setups in order to have the proper access to update the player inventory when
-        // player is interacting with it.
-        switch (_api.Side)
-        {
-            case EnumAppSide.Client:
-                _playerAwaitListenerId = ((ICoreClientAPI)_api).Event.RegisterGameTickListener(CheckPlayerReady, 200);
-                break;
-            case EnumAppSide.Server:
-                _harmony = OldMansEnhancedEditionModSystem.NewPatch("Spoiling Inventory Indicator", _patchCategoryName);
-                break;
-        }
+        _playerAwaitListenerId = _capi.Event.RegisterGameTickListener(CheckPlayerReady, 200);
+        _harmony = OldMansEnhancedEditionModSystem.NewPatch("Spoiling Inventory Indicator", _patchCategoryName);
+        Logger.Debug("Spoiling Indicator initialized");
         return true;
     }
     
     private void CheckPlayerReady(float dt)
     {
-        if (((ICoreClientAPI)_api).PlayerReadyFired)
+        if (((ICoreClientAPI)_capi).PlayerReadyFired)
         {
-            _player = ((ICoreClientAPI)_api).World.Player;
+            _player = ((ICoreClientAPI)_capi).World.Player;
             foreach ((string invKey, IInventory inv) in _player.InventoryManager.Inventories)
             {
                 if (!IsValidInventoryType(inv)) continue;
 
                 inv.SlotModified += slotId => SlotModified(invKey, slotId);
             }
-            ((ICoreClientAPI)_api).Event.UnregisterGameTickListener(_playerAwaitListenerId);
+            ((ICoreClientAPI)_capi).Event.UnregisterGameTickListener(_playerAwaitListenerId);
         }
     }
 
@@ -83,9 +75,9 @@ public class SpoilingInventoryIndicator : IFeature
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(GuiDialogInventory), nameof(GuiDialogInventory.OnGuiOpened))]
-    public static void BlockEntityDialogo_OnGuiOpened_PrefixPatch(ICoreClientAPI ___capi, IInventory ___backPackInv)
+    public static void GuiDialogInventory_OnGuiOpened_PrefixPatch(IInventory ___backPackInv)
     {
-        if (___capi.World.Player.WorldData.CurrentGameMode == EnumGameMode.Creative) return;
+        if (_capi.World.Player.WorldData.CurrentGameMode == EnumGameMode.Creative) return;
         foreach (int i in Enumerable.Range(0, ___backPackInv.Count))
         {
             UpdateSlotColor(___backPackInv[i]);
@@ -94,17 +86,17 @@ public class SpoilingInventoryIndicator : IFeature
     
     [HarmonyPrefix]
     [HarmonyPatch(typeof(GuiDialogBlockEntityInventory), nameof(GuiDialogBlockEntityInventory.OnGuiOpened))]
-    public static void BlockEntityDialog_OnGuiOpened_PrefixPatch(GuiDialogBlockEntityInventory __instance)
+    public static void GuiDialogBlockEntityInventory_OnGuiOpened_PrefixPatch(GuiDialogBlockEntityInventory __instance)
     {
         foreach (int i in Enumerable.Range(0, __instance.Inventory.Count))
         {
-            UpdateSlotColor(__instance.Inventory[i]);
+            UpdateSlotColor(__instance.Inventory [i]);
         }
     }
     
     [HarmonyPrefix]
     [HarmonyPatch(typeof(InventoryBase), nameof(InventoryBase.OnItemSlotModified))]
-    public static void BlockEntityDialog_OnGuiClosed_PostfixPatch(ItemSlot slot)
+    public static void InventoryBase_OnItemSlotModified_PostfixPatch(ItemSlot slot)
     {
         UpdateSlotColor(slot);
     }
@@ -126,7 +118,7 @@ public class SpoilingInventoryIndicator : IFeature
     private static bool IsItemSpoiled(ItemSlot itemSlot)
     {
         TransitionState[] transitionStates =
-            itemSlot.Itemstack?.Collectible.UpdateAndGetTransitionStates(_api.World, itemSlot);
+            itemSlot.Itemstack?.Collectible.UpdateAndGetTransitionStates(_capi.World, itemSlot);
         return  transitionStates?.Any(state => state.Props.Type is EnumTransitionType.Perish && state.TransitionLevel > 0) ?? false;
     }
 }
