@@ -6,6 +6,7 @@ using Vintagestory.API.Common;
 
 using OldMansEnhancedEdition.Utils;
 using Vintagestory.API.Client;
+using Vintagestory.API.Datastructures;
 using Vintagestory.API.Server;
 using Vintagestory.API.Util;
 using Vintagestory.Client.NoObf;
@@ -43,16 +44,16 @@ public class SpoilingInventoryIndicator : IFeature
     
     private void CheckPlayerReady(float dt)
     {
-        if (((ICoreClientAPI)_capi).PlayerReadyFired)
+        if (_capi.PlayerReadyFired)
         {
-            _player = ((ICoreClientAPI)_capi).World.Player;
+            _player = _capi.World.Player;
             foreach ((string invKey, IInventory inv) in _player.InventoryManager.Inventories)
             {
                 if (!IsValidInventoryType(inv)) continue;
 
                 inv.SlotModified += slotId => SlotModified(invKey, slotId);
             }
-            ((ICoreClientAPI)_capi).Event.UnregisterGameTickListener(_playerAwaitListenerId);
+            _capi.Event.UnregisterGameTickListener(_playerAwaitListenerId);
         }
     }
 
@@ -71,6 +72,7 @@ public class SpoilingInventoryIndicator : IFeature
     public void Teardown()
     {
         _harmony.UnpatchCategory(_patchCategoryName);
+        _capi.Event.UnregisterGameTickListener(_playerAwaitListenerId);
     }
 
     [HarmonyPrefix]
@@ -116,9 +118,20 @@ public class SpoilingInventoryIndicator : IFeature
     }
 
     private static bool IsItemSpoiled(ItemSlot itemSlot)
-    {
+    { 
+        
         TransitionState[] transitionStates =
             itemSlot.Itemstack?.Collectible.UpdateAndGetTransitionStates(_capi.World, itemSlot);
-        return  transitionStates?.Any(state => state.Props.Type is EnumTransitionType.Perish && state.TransitionLevel > 0) ?? false;
+        if (transitionStates?.Any(state => state.Props.Type is EnumTransitionType.Perish && state.TransitionLevel > 0) ?? false)
+            return true;
+        
+        // Holy Jesus ! Not sure how to fetch this any other way. Pertains to food containers like crocks
+        float? fresh = ((itemSlot.Itemstack?.Attributes.GetTreeAttribute("contents")?.Values[0] as ItemstackAttribute)?.value.Attributes
+            .GetTreeAttribute("transitionstate")?["freshHours"]?.GetValue() as float[])?[0];
+        float? hoursPassed = ((itemSlot.Itemstack?.Attributes.GetTreeAttribute("contents")?.Values[0] as ItemstackAttribute)?.value.Attributes
+            .GetTreeAttribute("transitionstate")?["transitionedHours"]?.GetValue() as float[])?[0];
+        
+        return (hoursPassed > fresh);
+
     }
 }

@@ -15,12 +15,9 @@ namespace OldMansEnhancedEdition;
 #nullable disable
 public class OldMansEnhancedEditionModSystem : ModSystem
 {
-    public static ModInfo ModInfo;
-    
     
     public override void Start(ICoreAPI api)
     {
-        ModInfo = Mod.Info;
         Logger.Init(this, api.Logger);
         Logger.Event(" has started initialization");
         Logger.Log(" Finished universal features initialization");
@@ -44,6 +41,7 @@ public class OldMansEnhancedEditionModSystem : ModSystem
             new CraftOnlyQuenchedItems(api),
             new CTRLStopOnLadders(api),
             new SpoilingInventoryIndicator(api),
+            new HungerCooldownBuff(api),
         ];
         LoadFeatures(features);
         Logger.Log(" Finished client features initialization");
