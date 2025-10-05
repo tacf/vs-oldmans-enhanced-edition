@@ -15,12 +15,17 @@ namespace OldMansEnhancedEdition;
 #nullable disable
 public class OldMansEnhancedEditionModSystem : ModSystem
 {
+    private static string _configFile;
     
     public override void Start(ICoreAPI api)
     {
         Logger.Init(this, api.Logger);
-        Logger.Event(" has started initialization");
+        Logger.Event($" loading features (Version: {Mod.Info.Version})");
         Logger.Log(" Finished universal features initialization");
+        _configFile = $"{Mod.Info.Name}.json".Replace(" ", "");
+
+        ModConfig.Instance = api.LoadModConfig<ModConfig>(_configFile) ?? new ModConfig();
+        api.StoreModConfig(ModConfig.Instance, _configFile);
     }
 
     public override void StartServerSide(ICoreServerAPI api)
@@ -42,6 +47,7 @@ public class OldMansEnhancedEditionModSystem : ModSystem
             new CTRLStopOnLadders(api),
             new SpoilingInventoryIndicator(api),
             new HungerCooldownBuff(api),
+            new InteractionProgress(api),
         ];
         LoadFeatures(features);
         Logger.Log(" Finished client features initialization");
@@ -67,7 +73,7 @@ public class OldMansEnhancedEditionModSystem : ModSystem
         foreach (IFeature feature in features)
         {
             if (!feature.Initialize())
-                Logger.Error($"Failed to initialize feature {feature.GetType().Name}");
+                Logger.Log($"Feature {feature.GetType().Name} not loaded");
             else
                 Logger.Log($"Loaded feature {feature.GetType().Name}");
         }

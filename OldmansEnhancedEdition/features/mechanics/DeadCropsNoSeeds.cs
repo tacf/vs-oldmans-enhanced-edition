@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using OldMansEnhancedEdition.Utils;
 using Vintagestory.API.Common;
 
 using Vintagestory.GameContent;
@@ -18,6 +19,8 @@ public class DeadCropsNoSeeds : IFeature
 
     public bool Initialize()
     {
+        if (ModConfig.Instance.DeadCropsDontDropSeeds == false)
+            return false;
         _harmony = OldMansEnhancedEditionModSystem.NewPatch("Dead Crops drop no seeds", _patchCategoryName);
         return true;
     }
