@@ -28,7 +28,7 @@ public class InteractionProgress(ICoreClientAPI api) : IFeature, IRenderer
     private const float AlphaOut = 0.4F;
 
     private const float Size = 48; // Outer size of square
-    private const float Thickness = 6; // Outline thickness
+    private const float Thickness = 3; // Outline thickness
 
     private MeshRef squareMesh = null;
 
@@ -89,11 +89,11 @@ public class InteractionProgress(ICoreClientAPI api) : IFeature, IRenderer
         {
             return false;
         }
-
+        
         float remainingPercentage = remainingResistance / blockSel.Block.Resistance * 100;
         if (remainingPercentage == 0f)
             return false;
-        _progress =  remainingPercentage;
+        _progress =  float.Lerp(remainingPercentage, _progress, 0.5f);
         return true;
     }
 
