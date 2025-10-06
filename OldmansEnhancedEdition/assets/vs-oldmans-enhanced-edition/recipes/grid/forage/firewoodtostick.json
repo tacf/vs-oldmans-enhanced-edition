@@ -1,0 +1,24 @@
+[
+	{
+		ingredientPattern: "KB",
+		ingredients: {
+			"K": { type: "item", code: "game:axe-*", isTool: true  },
+			"B": { type: "item", code: "game:firewood" }
+		},
+		width: 1,
+		height: 2,
+		shapeless: true,
+		output: { type: "item", code: "game:stick", quantity: 2  }
+	},
+	{
+		ingredientPattern: "KB",
+		ingredients: {
+			"K": { type: "item", code: "game:axe-*", isTool: true  },
+			"B": { type: "item", code: "game:agedfirewood" }
+		},
+		width: 1,
+		height: 2,
+		shapeless: true,
+		output: { type: "item", code: "game:stick", quantity: 1  }
+	}
+]
