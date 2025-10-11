@@ -1,0 +1,59 @@
+{
+	code: "bloomerychimneyrefractory",
+	behaviors: [
+		{name: "Lockable"},
+		{name: "UnstableFalling"}, 
+		{name: "Unplaceable"}
+	],
+	shape: { base: "game:block/clay/bloomery/chimney" },
+	variantgroups: [
+		{ code: "tier", states: ["tier1", "tier2", "tier3"] }
+	],
+	attributes: {
+		reinforcable: true
+	},
+	texturesByType: {
+		"*": { 
+			"inside": {  base: "block/clay/refractorybloomery/{tier}/inside" },
+			"chimney": {  base: "block/clay/refractorybloomery/{tier}/chimney" }
+		}
+	},
+	blockmaterial: "Ceramic",
+	creativeinventory: { "general": ["*"], "construction": ["*"] },
+	replaceable: 400,
+	resistance: 2.5,
+	maxStackSize: 1,
+	lightAbsorption: 0,
+	sounds: {
+		walk: "game:walk/stone",
+		place: "game:block/brickplace",
+		byTool: {
+			"Pickaxe": { hit: "game:block/rock-hit-pickaxe", break: "game:block/rock-break-pickaxe" }
+		}
+	},
+	collisionbox: { x1: 0.0625, y1: 0, z1: 0.0625, x2: 0.9375, y2: 0.625, z2: 0.9375 },
+	selectionbox: { x1: 0.0625, y1: 0, z1: 0.0625, x2: 0.9375, y2: 0.625, z2: 0.9375 },
+	sideopaque: {
+		all: false
+	},
+	sidesolid: {
+		all: false
+	},
+	dropsByType: {
+		"*-tier1": [{
+			type: "item", 
+			code: "game:refractorybrick-fired-{tier}",
+			quantity: { avg: 2.5, var: 0.5 } 
+		}],
+		"*-tier2": [{
+			type: "item", 
+			code: "game:refractorybrick-fired-{tier}",
+			quantity: { avg: 3.4, var: 0.2 } 
+		}],
+		"*-tier3": [{
+			type: "block", 
+			code: "bloomerychimneyrefractory-tier3",
+			quantity: { avg: 1 } 
+		}],
+	}
+}

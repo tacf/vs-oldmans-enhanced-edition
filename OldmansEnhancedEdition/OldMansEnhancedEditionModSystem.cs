@@ -34,6 +34,7 @@ public class OldMansEnhancedEditionModSystem : ModSystem
         [
             new ManualQuenchItems(api),
             new DeadCropsNoSeeds(),
+            new RefractoryBloomery(),
         ];
         LoadFeatures(features);
         Logger.Log(" Finished server features initialization");
