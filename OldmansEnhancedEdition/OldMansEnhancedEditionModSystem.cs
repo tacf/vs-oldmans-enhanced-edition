@@ -35,6 +35,7 @@ public class OldMansEnhancedEditionModSystem : ModSystem
             new ManualQuenchItems(api),
             new DeadCropsNoSeeds(),
             new RefractoryBloomery(),
+            new ArrowDamageOverTime(api),
         ];
         LoadFeatures(features);
         Logger.Log(" Finished server features initialization");
@@ -49,6 +50,9 @@ public class OldMansEnhancedEditionModSystem : ModSystem
             new SpoilingInventoryIndicator(api),
             new HungerCooldownBuff(api),
             new InteractionProgress(api),
+            new InventorySorting(api),
+            new HoneyParticles(api),
+            new FloatingDamageText(api),
         ];
         LoadFeatures(features);
         Logger.Log(" Finished client features initialization");

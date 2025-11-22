@@ -13,4 +13,9 @@ class ModConfig
     /// Show Interaction Progress Overlay.
     /// </summary>
     public bool InteractionProgresOverlay { get; set; } = true;
+    
+    /// <summary>
+    /// Show Floating Combat Text.
+    /// </summary>
+    public bool FloatingCombatText { get; set; } = true;
 }

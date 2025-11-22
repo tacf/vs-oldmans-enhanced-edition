@@ -65,7 +65,7 @@ public class SpoilingInventoryIndicator : IFeature
 
     private static bool IsValidInventoryType(IInventory inv)
     {
-        var typeName = inv.GetType().Name;
+        string typeName = inv.GetType().Name;
         return typeName is "InventoryPlayerHotbar" or "InventoryPlayerBackPacks";
     }
 

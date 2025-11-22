@@ -229,8 +229,8 @@ public class InteractionProgress(ICoreClientAPI api) : IFeature, IRenderer
         
         UpdateSquareMesh(_progress);
         
-        var rend = api.Render;
-        var shader = rend.CurrentActiveShader;
+        IRenderAPI rend = api.Render;
+        IShaderProgram shader = rend.CurrentActiveShader;
         
         alpha = Math.Max(0.0F, Math.Min(0.8F, alpha + (deltaTime / (shouldRender ? AlphaIn : -AlphaOut))));
         
