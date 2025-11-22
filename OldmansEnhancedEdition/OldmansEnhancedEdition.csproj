@@ -27,6 +27,7 @@
     <Reference Include="VintagestoryLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>$(VINTAGE_STORY)/VintagestoryLib.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="0Harmony">
       <HintPath>$(VINTAGE_STORY)/Lib/0Harmony.dll</HintPath>
