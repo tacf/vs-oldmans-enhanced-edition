@@ -52,7 +52,6 @@ public class OldMansEnhancedEditionModSystem : ModSystem
             new InteractionProgress(api),
             new InventorySorting(api),
             new HoneyParticles(api),
-            new FloatingDamageText(api),
         ];
         LoadFeatures(features);
         Logger.Log(" Finished client features initialization");
