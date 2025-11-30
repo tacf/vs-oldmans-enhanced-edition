@@ -8,7 +8,7 @@
         "tacf"
     ],
     "description": "Custom Crafted Experience -- Building upon the base game, adding several personal changes",
-    "version": "1.0.0-dev.2",
+    "version": "1.0.0-dev.3",
     "dependencies": {
         "game": "1.21.0"
     }
